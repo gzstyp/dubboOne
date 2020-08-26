@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--
+        发布出去的dubbo服务类所在包的注解(是生产的角色,充当发布者角色),本配置文件的作用:
+        1、注解发布的dubbo服务所在的包
+        2、配置消费方(消费服务的配置)
+        3、配置支持两种常用的调用方式对应协议,含主机、路径、端口、超时设置
+    -->
+    <!--启用发布的dubbo服务实现类所在包的注解,本项目使用的是dubbo协议,接口定义在子模块api的com.debug.mooc.dubbo.one.api.service,实现类在本server子模块实现-->
+    <dubbo:annotation package="com.debug.mooc.dubbo.one.server.service.dubbo" />
+
+    <!--注册中心zookeeper配置信息-->
+    <dubbo:registry address="${dubbo.registry.address}" />
+
+    <!--支持两种协议的调用：rpc-dubbo协议；http协议-rest api-url调用,全局的上下文路径,在http请求时是需要上下文路径的 -->
+    <dubbo:protocol name="rest" threads="500" contextpath="v1" server="tomcat" accepts="500"/>
+    <dubbo:protocol name="dubbo" />
+
+    <!--配置消费方信息,消费的角色方配置,#因为是服务消费,需要指定是消费谁发布服务名,此处的值是debug-->
+	<dubbo:application name="dubboOne-consume" owner="fwtaiApp" organization="dubbox"/>
+
+</beans>
